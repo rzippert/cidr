@@ -16,15 +16,21 @@ builds:
     goarch:
       - amd64
       - arm64
-
-archives:
-  - id: "cidr-archive"
-    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}} -X main.builtBy=goreleaser
     replacements:
       darwin: Darwin
       linux: Linux
       windows: Windows
       amd64: x86_64
+      arm64: arm64
+
+archives:
+  - id: "cidr-archive"
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
     format: binary # we are only creating the binary, not a zip
 
 nfpms:
