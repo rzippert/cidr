@@ -16,17 +16,12 @@ builds:
     goarch:
       - amd64
       - arm64
-    mod_timestamp: '{{ .CommitTimestamp }}'
-    flags:
-      - -trimpath
-    ldflags:
-      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}} -X main.builtBy=goreleaser
+    # Replacements for GOOS and GOARCH in the binary name
     replacements:
       darwin: Darwin
       linux: Linux
       windows: Windows
       amd64: x86_64
-      arm64: arm64
 
 archives:
   - id: "cidr-archive"
