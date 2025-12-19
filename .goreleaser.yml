@@ -1,0 +1,57 @@
+# .goreleaser.yml
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: "cidr"
+    main: .
+    binary: cidr
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - id: "cidr-archive"
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      amd64: x86_64
+    format: binary # we are only creating the binary, not a zip
+
+nfpms:
+  - id: "cidr-nfpms"
+    package_name: "cidr"
+    homepage: "https://github.com/rzippert/cidr"
+    maintainer: "Renato Zippert <noemail@example.com>"
+    description: "CIDR Calculator"
+    license: "MIT"
+    vendor: "Renato Zippert"
+    formats:
+      - deb
+      - rpm
+      - apk
+      - archlinux
+    bindir: /usr/local/bin
+
+release:
+  github:
+    owner: rzippert
+    name: cidr
+  # If you want to automatically generate release notes from git log, uncomment the following
+  # changelog:
+  #   sort: asc
+  #   filters:
+  #     excludes:
+  #       - '^docs:'
+  #       - '^test:'
+  #       - 'merge'
+  #       - 'Merge'
